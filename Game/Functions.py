@@ -40,6 +40,6 @@ def Lives(screen, lives):
     return screen
 
 def Live_control (lives):
-    if lives > 10:
-        lives = 10
+    if lives > 5:
+        lives = 5
     return lives

@@ -87,13 +87,13 @@ def Counter(counter):
         specific_num = counter[i]
         specific_tex = texture_finder(specific_num)
         specific_tex = specific_tex.convert_alpha()
-        screen.blit(specific_tex,(WIDTH - 80 - 40*(len(counter)-1-i),40))
+        screen.blit(specific_tex,(130 - 40*(len(counter)-1-i),60))
     return True
 
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Soulless Gears")
+pygame.display.set_caption("Spaceship fight")
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
@@ -116,10 +116,10 @@ class Player(pygame.sprite.Sprite):
             self.speedx = -10
         if keystate[pygame.K_RIGHT]:
             self.speedx = 10
-        if keystate[pygame.K_UP]:
-            self.speedy = -10
-        if keystate[pygame.K_DOWN]:
-            self.speedy = 10
+        # if keystate[pygame.K_UP]:
+        #     self.speedy = -10
+        # if keystate[pygame.K_DOWN]:
+        #     self.speedy = 10
         self.rect.y += self.speedy
         self.rect.x += self.speedx
         if self.rect.y < 0:
@@ -185,7 +185,7 @@ class Enemy_for_boss(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 50))
+        self.image = pygame.Surface((75, 75))
         self.image = Textures.enemy_1
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, WIDTH)
@@ -377,8 +377,8 @@ while running:
             if event.key == pygame.K_SPACE:
                 player.shoot()
 
-    if  count_enemy == 5:
-        all_sprites.add(mini_boss) 
+    # if  count_enemy == 5:
+    #     all_sprites.add(mini_boss) 
 
     keystate = pygame.key.get_pressed()
     if keystate[pygame.K_d]:
@@ -395,13 +395,13 @@ while running:
             background = Textures.screen_3
 
 
-    if keystate[pygame.K_l]:
-        if counter >= 1000 and lvl_control == 1:
-            counter -= 1000
-            lvl_control = 2
-        elif lvl_control == 2 and counter >= 10000:
-            counter -= 10000
-            lvl_control = 3
+    # if keystate[pygame.K_l]:
+    #     if counter >= 1000 and lvl_control == 1:
+    #         counter -= 1000
+    #         lvl_control = 2
+    #     elif lvl_control == 2 and counter >= 10000:
+    #         counter -= 10000
+    #         lvl_control = 3
     
     period = bot_spawner(period)
 
@@ -415,10 +415,13 @@ while running:
             lives -= 1
         e1 = Enemy()
         e2 = Enemy()
+        e3 = Enemy()
         enemy.add(e1)
         enemy.add(e2)
+        enemy.add(e3)
         all_sprites.add(e1)
         all_sprites.add(e2)
+        all_sprites.add(e3)
 
     boss_touch = pygame.sprite.spritecollide(mini_boss, me, False)
     if boss_touch:
@@ -431,15 +434,15 @@ while running:
     if lvl_control < 2:
         hits = pygame.sprite.groupcollide(bullets, enemy, True, True)
         if hits:
-            counter += 100
+            counter += random.randint(1,10)
     elif lvl_control == 2:
         hits = pygame.sprite.groupcollide(bullets, enemy, True, True)
         if hits:
-            counter += 200
+            counter += 10
     else:
         hits = pygame.sprite.groupcollide(bullets, enemy, False, True)
         if hits:
-            counter += 300
+            counter += 10
 
     #screen.fill(YELLOW)
 
@@ -448,7 +451,7 @@ while running:
     all_sprites.draw(screen)
 
     Counter(counter)
-    Menu(screen)
+    # Menu(screen)
     lives = Live_control(lives)
     Lives(screen, lives)
     pygame.display.flip()
