@@ -116,10 +116,10 @@ class Player(pygame.sprite.Sprite):
             self.speedx = -10
         if keystate[pygame.K_RIGHT]:
             self.speedx = 10
-        # if keystate[pygame.K_UP]:
-        #     self.speedy = -10
-        # if keystate[pygame.K_DOWN]:
-        #     self.speedy = 10
+        if keystate[pygame.K_UP]:
+            self.speedy = -10
+        if keystate[pygame.K_DOWN]:
+            self.speedy = 10
         self.rect.y += self.speedy
         self.rect.x += self.speedx
         if self.rect.y < 0:
@@ -127,9 +127,15 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y > HEIGHT - 100:
             self.rect.y = HEIGHT - 100
         if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
+            self.rect.x = 10
+            # self.rect.right = WIDTH
         if self.rect.left < 0:
-            self.rect.left = 0
+            self.rect.x = WIDTH - 60
+            # self.rect.left = 0
+
+    def game_over(self):
+            self.rect.y = HEIGHT/2
+            self.rect.x = WIDTH/2
 
     def shoot(self):
         global lvl_control
@@ -361,14 +367,17 @@ period_to_spawn_boss = random.randint(1,10)
 
 counter = 0
 lvl_control = 1
-lives = 5
+lives = 3
 
 running = True
 while running:
     clock.tick(FPS)
 
     if lives == 0:
+        player.game_over()
+        time.sleep(5)
         break
+       
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
